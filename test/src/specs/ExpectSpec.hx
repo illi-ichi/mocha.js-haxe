@@ -10,11 +10,17 @@ using js.expect.Expect;
  * @author Richard Janicek
  */
 
+enum TestEnum<T1, T2> { 
+  A;
+  B;
+  C(x: Int);
+  D(x: T1, y: T2);
+}
+
 class ExpectSpec {
 		
 	public function new() {
 		M.describe("Expect", function () {
-			
 			M.it("ok: asserts that the value is truthy or not", function() { 
 				E.expect(1).to.be.ok();
 				E.expect(true).to.be.ok();
@@ -118,6 +124,16 @@ class ExpectSpec {
 			M.it("should explicitly fail with message", function () {
 				(function() { E.expect().fail("you shall not pass!"); } ).should().throwExceptionMatch("you shall not pass!");
 			});
+
+            M.it("enumEqual: asserts equality of Enum value", function (){
+                E.expect(A).enumEqual(A);
+                E.expect(A).not.enumEqual(B);
+                E.expect(C(1)).enumEqual(C(1));
+                E.expect(C(1)).not.enumEqual(C(2));
+                E.expect(D(1,"a")).enumEqual(D(1, "a"));
+                E.expect(D(C(-10), false)).enumEqual(D(C(-10), false));
+                E.expect(D(C(-10), false)).not.enumEqual(D(C(1), false));
+            });
 			
 		});
 	}

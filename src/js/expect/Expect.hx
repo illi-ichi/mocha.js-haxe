@@ -162,5 +162,12 @@ class ExpectMixins {
 	public static function throwExceptionMatch( e : Expect, pattern : String, ?modifiers : String ) : Expect {
 		return untyped __js__("e.throwException(new RegExp(pattern,modifiers))");
 	}
-	
+
+    public static function enumEqual(e: Expect, expected : Dynamic)	: Expect {
+        var v = (untyped e).obj;
+        return (untyped e).assert(Type.enumEq(v, expected),
+            function(){ return 'expected ${Std.string(v)} to be ${Std.string(expected)}';},
+            function(){ return 'expected ${Std.string(v)} not to be ${Std.string(expected)}';}
+        );
+    }
 }
